@@ -1,0 +1,103 @@
+/* Container centering the form */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+}
+
+/* Card style */
+.form-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* Title */
+.form-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+/* Form group spacing */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+/* Labels */
+.form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: 1px solid #d1d5db;
+  color: black;
+  border-radius: 9999px;
+  font-size: 1rem;
+  background-color: #f9fafb;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Button group */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Base button styles */
+.btn {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  width: 8rem;
+}
+
+/* Join Group button */
+.join-group {
+  background-color: #4b5563;
+}
+.join-group:hover {
+  background-color: #374151;
+}
+.join-group:focus {
+  box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.4);
+}
+
+/* Create Group button */
+.create-group {
+  background-color: #f97316;
+}
+.create-group:hover {
+  background-color: #c2410c;
+}
+.create-group:focus {
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.5);
+}
