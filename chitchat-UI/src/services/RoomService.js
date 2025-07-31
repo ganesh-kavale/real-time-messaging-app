@@ -1,7 +1,7 @@
 import { httpClient } from "../config/AxiosHelper";
 
-export const createRoomApi = async (roomDetail) => {
-  const respone = await httpClient.post(`/api/v1/rooms`, roomDetail, {
+export const createRoomApi = async (groupDetail) => {
+  const respone = await httpClient.post(`/api/v1/groups`, groupDetail, {
     headers: {
       "Content-Type": "text/plain",
     },
@@ -9,14 +9,15 @@ export const createRoomApi = async (roomDetail) => {
   return respone.data;
 };
 
-export const joinChatApi = async (roomId) => {
-  const response = await httpClient.get(`/api/v1/rooms/${roomId}`);
+export const joinChatApi = async (groupId) => {
+  
+  const response = await httpClient.get(`/api/v1/groups/${groupId}`);
   return response.data;
 };
 
-export const getMessagess = async (roomId, size = 50, page = 0) => {
+export const getMessagess = async (groupId, size = 50, page = 0) => {
   const response = await httpClient.get(
-    `/api/v1/rooms/${roomId}/messages?size=${size}&page=${page}`
+    `/api/v1/groups/${groupId}/messages?size=${size}&page=${page}`
   );
   console.log(response.data);
   
