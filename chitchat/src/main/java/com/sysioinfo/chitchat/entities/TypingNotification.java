@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TypingNotification {
-    private String roomId;
+    private String groupId;
     private String username;
 }
