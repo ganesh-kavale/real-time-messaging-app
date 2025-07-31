@@ -57,7 +57,6 @@ public class RoomController {
         return ResponseEntity.ok(room);
     }
 
-
     //get messages of room
 
     @GetMapping("/{roomId}/messages")

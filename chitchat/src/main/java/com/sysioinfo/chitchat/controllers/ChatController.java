@@ -1,9 +1,13 @@
 package com.sysioinfo.chitchat.controllers;
 
 import com.sysioinfo.chitchat.entities.Message;
+import com.sysioinfo.chitchat.entities.TypingNotification;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +22,8 @@ import java.time.LocalDateTime;
 @CrossOrigin("http://localhost:5174")
 public class ChatController {
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     private RoomRepository roomRepository;
 
@@ -50,4 +56,14 @@ public class ChatController {
         return message;
 
     }
+
+    @MessageMapping("/typing")
+    public void typing(@Payload TypingNotification notification) {
+        System.out.println("User typing: " + notification.getUsername() + " in room " + notification.getRoomId());
+
+        String destination = "/topic/typing/" + notification.getRoomId();
+        messagingTemplate.convertAndSend(destination, notification);
+    }
+
+
 }
