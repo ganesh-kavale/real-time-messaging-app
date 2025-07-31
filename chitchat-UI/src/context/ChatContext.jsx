@@ -3,17 +3,17 @@ import { createContext, useContext, useState } from "react";
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
-  const [roomId, setRoomId] = useState("");
+  const [groupId, setGroupId] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [connected, setConnected] = useState(false);
 
   return (
     <ChatContext.Provider
       value={{
-        roomId,
+        groupId,
         currentUser,
         connected,
-        setRoomId,
+        setGroupId,
         setCurrentUser,
         setConnected,
       }}

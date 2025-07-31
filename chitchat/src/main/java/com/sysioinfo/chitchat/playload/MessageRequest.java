@@ -13,7 +13,7 @@ public class MessageRequest {
 
     private String content;
     private String sender;
-    private String roomId;
+    private String groupId;
 	public String getContent() {
 		return content;
 	}
@@ -26,14 +26,13 @@ public class MessageRequest {
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
-	public String getRoomId() {
-		return roomId;
+	public String getGroupId() {
+		return groupId;
 	}
-	public void setRoomId(String roomId) {
-		this.roomId = roomId;
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 
-    
-    
+
 
 }

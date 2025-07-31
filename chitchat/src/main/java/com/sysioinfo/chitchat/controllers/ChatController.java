@@ -12,9 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.sysioinfo.chitchat.entities.Room;
+import com.sysioinfo.chitchat.entities.Group;
 import com.sysioinfo.chitchat.playload.MessageRequest;
-import com.sysioinfo.chitchat.repositories.RoomRepository;
+import com.sysioinfo.chitchat.repositories.GroupRepository;
 
 import java.time.LocalDateTime;
 
@@ -25,32 +25,32 @@ public class ChatController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    private RoomRepository roomRepository;
+    private GroupRepository groupRepository;
 
-    public ChatController(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    public ChatController(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
     }
 
 
     //for sending and receiving messages
-    @MessageMapping("/sendMessage/{roomId}")// /app/sendMessage/roomId
-    @SendTo("/topic/room/{roomId}")//subscribe
+    @MessageMapping("/sendMessage/{groupId}")// /app/sendMessage/roomId
+    @SendTo("/topic/group/{groupId}")//subscribe
     public Message sendMessage(
-            @DestinationVariable String roomId,
+            @DestinationVariable String groupId,
             @RequestBody MessageRequest request
     ) {
 
-        Room room = roomRepository.findByRoomId(request.getRoomId());
+        Group group = groupRepository.findByGroupId(request.getGroupId());
         Message message = new Message();
 
         message.setContent(request.getContent());
         message.setSender(request.getSender());
         message.setTimeStamp(LocalDateTime.now());
-        if (room != null) {
-            room.getMessages().add(message);
-            roomRepository.save(room);
+        if (group != null) {
+            group.getMessages().add(message);
+            groupRepository.save(group);
         } else {
-            throw new RuntimeException("room not found !!");
+            throw new RuntimeException("group not found !!");
         }
 
         return message;
@@ -59,9 +59,9 @@ public class ChatController {
 
     @MessageMapping("/typing")
     public void typing(@Payload TypingNotification notification) {
-        System.out.println("User typing: " + notification.getUsername() + " in room " + notification.getRoomId());
+        System.out.println("User typing: " + notification.getUsername() + " in room " + notification.getGroupId());
 
-        String destination = "/topic/typing/" + notification.getRoomId();
+        String destination = "/topic/typing/" + notification.getGroupId();
         messagingTemplate.convertAndSend(destination, notification);
     }
 
