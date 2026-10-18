@@ -19,7 +19,7 @@ const JoinCreateChatView = ({
         </p>
 
         <div className="group-form-field">
-          <label htmlFor="name" className="group-form-label">Your name</label>
+          <label htmlFor="name" className="group-form-label">Display name</label>
           <input
             type="text"
             id="name"
