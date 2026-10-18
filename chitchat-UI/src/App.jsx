@@ -15,7 +15,7 @@ function App() {
           </a>
           <nav aria-label="Main navigation">
             <a className="app-nav-link" href="#join">
-              Start a chat
+              Start a team chat
               <FiArrowRight aria-hidden="true" />
             </a>
           </nav>
@@ -25,19 +25,19 @@ function App() {
         <section className="welcome-panel" aria-labelledby="welcome-title">
           <img
             className="welcome-panel__image"
-            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1800&q=85"
-            alt="Friends spending time together outdoors"
+            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1800&q=85"
+            alt="Coworkers sharing ideas around a laptop in an office"
           />
           <div className="welcome-panel__shade" aria-hidden="true" />
           <div className="welcome-panel__content">
-            <p className="welcome-panel__eyebrow">A LITTLE CLOSER, EVERY DAY</p>
-            <h1 id="welcome-title">Good friends.<br />Great conversations.</h1>
+            <p className="welcome-panel__eyebrow">TEAM CONVERSATIONS, MADE EASY</p>
+            <h1 id="welcome-title">Great teams<br />start with a chat.</h1>
             <p className="welcome-panel__copy">
-              Make a space for your favorite people and keep the conversation going.
+              Give coworkers a place to connect, share ideas, and keep everyday conversations moving.
             </p>
           </div>
         </section>
-        <section className="join-panel" id="join" aria-label="Join or create a group">
+        <section className="join-panel" id="join" aria-label="Join or create a team room">
           <JoinCreateChat />
         </section>
       </main>
