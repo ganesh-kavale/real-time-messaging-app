@@ -148,7 +148,7 @@ const ChatPage = () => {
           <span>MEETIN</span>
         </a>
 
-        <div className="office-topbar__room" aria-label="Current team room">
+        <div className="office-topbar__room" aria-label="Current team">
           <span className="office-topbar__workspace">
             <FiBriefcase aria-hidden="true" /> Team workspace
           </span>
@@ -165,8 +165,8 @@ const ChatPage = () => {
             className="office-leave-button"
             type="button"
             onClick={handleLogout}
-            aria-label="Leave team room"
-            title="Leave team room"
+            aria-label="Leave team"
+            title="Leave team"
           >
             <FiLogOut aria-hidden="true" />
             <span>Leave</span>
@@ -189,11 +189,11 @@ const ChatPage = () => {
             </div>
           </div>
 
-          <nav className="office-sidebar__section" aria-label="Team rooms">
-            <p className="office-sidebar__label">ROOMS</p>
+          <nav className="office-sidebar__section" aria-label="Teams">
+            <p className="office-sidebar__label">TEAMS</p>
             <div className="office-room-link" aria-current="page">
               <FiHash aria-hidden="true" />
-              <span>{groupId || "Team room"}</span>
+              <span>{groupId || "Team"}</span>
             </div>
           </nav>
 
@@ -216,7 +216,7 @@ const ChatPage = () => {
               </span>
               <span className="conversation-heading__text">
                 <h1>{groupId}</h1>
-                <span>Team room</span>
+                <span>Team</span>
               </span>
             </div>
             <span className="conversation-kind">TEAM CONVERSATION</span>
@@ -289,10 +289,10 @@ const ChatPage = () => {
           </div>
         </section>
 
-        <aside className="room-details" aria-label="Team room details">
-          <h2>Room details</h2>
+        <aside className="room-details" aria-label="Team details">
+          <h2>Team details</h2>
           <section className="room-details__section">
-            <p className="room-details__label">ROOM ID</p>
+            <p className="room-details__label">TEAM ID</p>
             <p className="room-details__value"><FiHash aria-hidden="true" />{groupId}</p>
           </section>
           <section className="room-details__section">

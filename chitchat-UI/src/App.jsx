@@ -37,7 +37,7 @@ function App() {
             </p>
           </div>
         </section>
-        <section className="join-panel" id="join" aria-label="Join or create a team room">
+        <section className="join-panel" id="join" aria-label="Join or create a team">
           <JoinCreateChat />
         </section>
       </main>

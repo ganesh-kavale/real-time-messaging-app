@@ -20,7 +20,7 @@ const JoinCreateChat = () => {
 
   const validateForm = () => {
     const newErrors = {
-      groupId: detail.groupId.trim() === "" ? "Team room ID is required" : "",
+      groupId: detail.groupId.trim() === "" ? "Team ID is required" : "",
       userName: detail.userName.trim() === "" ? "Name is required" : "",
     };
     setErrors(newErrors);
@@ -35,13 +35,13 @@ const JoinCreateChat = () => {
     if (!validateForm()) return;
     try {
       const group = await joinChatApi(detail.groupId);
-      toast.success("Joined team room successfully");
+      toast.success("Joined team successfully");
       setCurrentUser(detail.userName);
       setGroupId(group.groupId);
       setConnected(true);
       navigate("/chat");
     } catch (error) {
-      toast.error(error?.status === 400 ? error.response?.data || "Bad Request" : "Error joining team room");
+      toast.error(error?.status === 400 ? error.response?.data || "Bad Request" : "Error joining team");
     }
   };
 
@@ -49,13 +49,13 @@ const JoinCreateChat = () => {
     if (!validateForm()) return;
     try {
       const response = await createRoomApi(detail.groupId);
-      toast.success("Team room created successfully");
+      toast.success("Team created successfully");
       setCurrentUser(detail.userName);
       setGroupId(response.groupId);
       setConnected(true);
       navigate("/chat");
     } catch (error) {
-      toast.error(error?.status === 400 ? "Team room already exists!" : "Error creating team room");
+      toast.error(error?.status === 400 ? "Team already exists!" : "Error creating team");
     }
   };
 

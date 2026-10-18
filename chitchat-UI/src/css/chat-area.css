@@ -388,6 +388,10 @@
   margin: 0 auto 20px;
 }
 
+.message-row--self {
+  justify-content: flex-end;
+}
+
 .office-avatar--message {
   width: 30px;
   height: 30px;
@@ -400,6 +404,7 @@
 
 .message-main {
   min-width: 0;
+  max-width: min(78%, 680px);
   padding: 2px 0;
 }
 
@@ -407,6 +412,10 @@
   padding: 9px 12px;
   border-radius: 6px;
   background: #f0f6f0;
+}
+
+.message-row--self .message-meta {
+  justify-content: flex-end;
 }
 
 .message-meta {
