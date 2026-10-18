@@ -1,0 +1,357 @@
+.app-shell {
+	min-height: 100vh;
+	background: #f6f3eb;
+}
+
+.app-navbar {
+	position: relative;
+	z-index: 1;
+	height: 72px;
+	background: #fbfaf6;
+	border-bottom: 1px solid #e6e2d8;
+}
+
+.app-navbar__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: min(100% - 48px, 1160px);
+	height: 100%;
+	margin: 0 auto;
+}
+
+.app-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	color: #193a34;
+	font-size: 16px;
+	font-weight: 750;
+	letter-spacing: 0.04em;
+	text-decoration: none;
+}
+
+.app-brand__icon {
+	display: grid;
+	width: 36px;
+	height: 36px;
+	place-items: center;
+	border-radius: 10px;
+	background: #e1efe4;
+	color: #26714e;
+	font-size: 20px;
+}
+
+.app-nav-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	min-height: 40px;
+	padding: 0 16px;
+	border: 1px solid #236746;
+	border-radius: 6px;
+	background: #236746;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.app-nav-link:hover {
+	border-color: #194e34;
+	background: #194e34;
+	transform: translateY(-1px);
+}
+
+.app-nav-link:focus-visible,
+.app-brand:focus-visible {
+	outline: 3px solid #65b9a4;
+	outline-offset: 3px;
+}
+
+.app-main {
+	display: grid;
+	grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
+	min-height: calc(100vh - 72px);
+}
+
+.welcome-panel {
+	position: relative;
+	display: flex;
+	align-items: flex-end;
+	min-height: 660px;
+	overflow: hidden;
+	background: #364f43;
+	color: #fff;
+}
+
+.welcome-panel__image,
+.welcome-panel__shade {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.welcome-panel__image {
+	object-fit: cover;
+	object-position: center;
+}
+
+.welcome-panel__shade {
+	background: linear-gradient(0deg, rgba(16, 35, 27, 0.8) 0%, rgba(16, 35, 27, 0.2) 58%, rgba(16, 35, 27, 0.08) 100%);
+}
+
+.welcome-panel__content {
+	position: relative;
+	max-width: 620px;
+	padding: 64px 58px 72px;
+	animation: welcome-arrive 500ms ease-out both;
+}
+
+.welcome-panel__eyebrow {
+	margin: 0 0 18px;
+	color: #d9f0b2;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+}
+
+.welcome-panel__content h1 {
+	margin: 0;
+	font-size: 54px;
+	font-weight: 650;
+	line-height: 1.08;
+}
+
+.welcome-panel__copy {
+	max-width: 420px;
+	margin: 22px 0 0;
+	color: rgba(255, 255, 255, 0.88);
+	font-size: 16px;
+	line-height: 1.65;
+}
+
+.join-panel {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	background: #f6f3eb;
+}
+
+@keyframes welcome-arrive {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (max-width: 900px) {
+	.app-main {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.welcome-panel {
+		min-height: 440px;
+	}
+
+	.welcome-panel__content {
+		padding: 52px 40px 48px;
+	}
+
+	.join-panel {
+		min-height: 520px;
+	}
+
+	.join-panel .group-form-container {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.app-navbar__inner {
+		width: calc(100% - 32px);
+	}
+
+	.app-nav-link {
+		gap: 6px;
+		padding: 0 10px;
+		font-size: 13px;
+	}
+
+	.welcome-panel {
+		min-height: 370px;
+	}
+
+	.welcome-panel__content {
+		padding: 42px 24px 36px;
+	}
+
+	.welcome-panel__content h1 {
+		font-size: 40px;
+	}
+
+	.welcome-panel__copy {
+		max-width: 330px;
+		margin-top: 14px;
+		font-size: 15px;
+	}
+
+	.join-panel {
+		min-height: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.welcome-panel__content {
+		animation: none;
+	}
+
+	.app-nav-link {
+		transition: none;
+	}
+}
+
+.join-panel .group-form-container {
+	min-height: 0;
+	padding: 56px 52px;
+	background: transparent;
+}
+
+.join-panel .group-form-card {
+	width: 100%;
+	max-width: 430px;
+	padding: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+}
+
+.join-panel .group-form-eyebrow {
+	margin: 0 0 14px;
+	color: #397b58;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+}
+
+.join-panel .group-form-title {
+	margin: 0;
+	color: #1b2d27;
+	font-size: 38px;
+	font-weight: 650;
+	line-height: 1.12;
+}
+
+.join-panel .group-form-copy {
+	margin: 14px 0 32px;
+	color: #69766e;
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.join-panel .group-form-field {
+	margin-bottom: 18px;
+}
+
+.join-panel .group-form-label {
+	margin-bottom: 7px;
+	color: #33443b;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.join-panel .group-form-input {
+	box-sizing: border-box;
+	min-height: 50px;
+	padding: 12px 14px;
+	border-color: #d2d8cf;
+	background: #fffefa;
+	color: #1d2d27;
+}
+
+.join-panel .group-form-input:focus {
+	border-color: #397b58;
+	box-shadow: 0 0 0 3px rgba(57, 123, 88, 0.14);
+}
+
+.join-panel .group-form-actions {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	margin-top: 26px;
+}
+
+.join-panel .group-form-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	min-height: 50px;
+	padding: 10px 14px;
+	border: 1px solid transparent;
+	font-size: 14px;
+	font-weight: 650;
+	transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.join-panel .group-form-btn--join {
+	border-color: #236746;
+	background: #236746;
+	color: #fff;
+}
+
+.join-panel .group-form-btn--join:hover {
+	border-color: #194e34;
+	background: #194e34;
+	transform: translateY(-1px);
+}
+
+.join-panel .group-form-btn--create {
+	border-color: #d2d8cf;
+	background: transparent;
+	color: #33443b;
+}
+
+.join-panel .group-form-btn--create:hover {
+	border-color: #a9bcae;
+	background: #edf1e9;
+}
+
+.join-panel .group-form-btn:focus-visible {
+	outline: 3px solid #85b99a;
+	outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+	.join-panel .group-form-container {
+		padding: 48px 32px;
+	}
+}
+
+@media (max-width: 480px) {
+	.join-panel .group-form-container {
+		padding: 42px 24px 56px;
+	}
+
+	.join-panel .group-form-title {
+		font-size: 34px;
+	}
+
+	.join-panel .group-form-actions {
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+
+	.join-panel .group-form-btn {
+		min-height: 48px;
+	}
+}
