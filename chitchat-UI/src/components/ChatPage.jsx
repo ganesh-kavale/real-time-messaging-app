@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MdSend } from "react-icons/md";
-import { FiBriefcase, FiHash, FiLogOut, FiMessageSquare } from "react-icons/fi";
+import {
+  FiBriefcase,
+  FiHash,
+  FiLogOut,
+  FiMessageSquare,
+  FiUsers,
+  FiX,
+} from "react-icons/fi";
 import useChatContext from "../context/ChatContext";
 import { useNavigate } from "react-router";
 import SockJS from "sockjs-client";
@@ -25,6 +32,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typingUsers, setTypingUsers] = useState([]);
+  const [membersOpen, setMembersOpen] = useState(false);
   const activeTypingUser = typingUsers[0] || "";
 
   const stompClientRef = useRef(null);
@@ -58,6 +66,17 @@ const ChatPage = () => {
       });
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (!membersOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMembersOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [membersOpen]);
 
   // Initialize WebSocket and subscribe to group and typing topic
   useEffect(() => {
@@ -138,6 +157,17 @@ const ChatPage = () => {
     .map((part) => part[0]?.toUpperCase())
     .join("");
 
+  const knownNames = [currentUser, ...typingUsers, ...messages.map((message) => message.sender)];
+  const membersByName = new Map();
+  knownNames.forEach((name) => {
+    const displayName = name?.trim();
+    const memberKey = displayName?.toLocaleLowerCase();
+    if (displayName && !membersByName.has(memberKey)) {
+      membersByName.set(memberKey, displayName);
+    }
+  });
+  const teamMembers = [...membersByName.values()];
+
   return (
     <div className="office-chat">
       <header className="office-topbar">
@@ -191,10 +221,17 @@ const ChatPage = () => {
 
           <nav className="office-sidebar__section" aria-label="Teams">
             <p className="office-sidebar__label">TEAMS</p>
-            <div className="office-room-link" aria-current="page">
+            <button
+              className="office-room-link"
+              type="button"
+              aria-current="page"
+              aria-haspopup="dialog"
+              aria-expanded={membersOpen}
+              onClick={() => setMembersOpen(true)}
+            >
               <FiHash aria-hidden="true" />
               <span>{groupId || "Team"}</span>
-            </div>
+            </button>
           </nav>
 
           <div className="office-sidebar__profile">
@@ -219,7 +256,19 @@ const ChatPage = () => {
                 <span>Team</span>
               </span>
             </div>
-            <span className="conversation-kind">TEAM CONVERSATION</span>
+              {/* <span className="conversation-kind">TEAM CONVERSATION</span> */}
+
+            <button
+              className="team-members-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded={membersOpen}
+              aria-label={`View ${teamMembers.length} team members`}
+              onClick={() => setMembersOpen(true)}
+            >
+              <FiUsers aria-hidden="true" />
+              <span>{teamMembers.length} Team Members</span>
+            </button>
           </header>
 
           <div className="conversation-messages" ref={chatBoxRef}>
@@ -306,6 +355,51 @@ const ChatPage = () => {
           </section>
         </aside>
       </div>
+
+      {membersOpen && (
+        <div className="team-members-backdrop" onClick={() => setMembersOpen(false)}>
+          <section
+            className="team-members-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="team-members-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <header className="team-members-dialog__header">
+              <div>
+                <h2 id="team-members-title">Team members</h2>
+                <p>{groupId} · {teamMembers.length} {teamMembers.length === 1 ? "person" : "people"}</p>
+              </div>
+              <button
+                className="team-members-dialog__close"
+                type="button"
+                aria-label="Close team members"
+                onClick={() => setMembersOpen(false)}
+              >
+                <FiX aria-hidden="true" />
+              </button>
+            </header>
+            <ul className="team-members-list">
+              {teamMembers.map((member) => {
+                const initials = member
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map((part) => part[0]?.toUpperCase())
+                  .join("");
+                const isCurrentUser = member.toLocaleLowerCase() === currentUser.toLocaleLowerCase();
+
+                return (
+                  <li className="team-member" key={member}>
+                    <span className="office-avatar" aria-hidden="true">{initials}</span>
+                    <span className="team-member__name">{member}</span>
+                    {isCurrentUser && <span className="team-member__you">You</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        </div>
+      )}
     </div>
   );
 };

@@ -234,16 +234,25 @@
 
 .office-room-link {
   display: flex;
+  width: 100%;
   min-height: 36px;
   align-items: center;
   gap: 9px;
   overflow: hidden;
   padding: 0 9px;
+  border: 0;
   border-radius: 5px;
   background: #eaf2eb;
   color: #28583c;
   font-size: 12px;
   font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.office-room-link:hover,
+.office-room-link[aria-expanded="true"] {
+  background: #e1ede2;
 }
 
 .office-room-link svg {
@@ -331,6 +340,146 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   white-space: nowrap;
+}
+
+.team-members-trigger {
+  display: inline-flex;
+  min-height: 34px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  border: 1px solid #dfe6df;
+  border-radius: 6px;
+  background: #fff;
+  color: #536e5d;
+  cursor: pointer;
+  font-size: 11px !important;
+  font-weight: 650 !important;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.team-members-trigger:hover,
+.team-members-trigger[aria-expanded="true"] {
+  border-color: #c5d8c8;
+  background: #f1f6f1;
+}
+
+.team-members-trigger svg {
+  font-size: 15px;
+}
+
+.team-members-backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(25, 39, 31, 0.28);
+  animation: team-members-fade-in 140ms ease-out both;
+}
+
+.team-members-dialog {
+  width: min(100%, 390px);
+  max-height: min(560px, 80vh);
+  overflow: hidden;
+  border: 1px solid #e0e7df;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 18px 55px rgba(27, 45, 34, 0.2);
+  animation: team-members-rise-in 180ms ease-out both;
+}
+
+.team-members-dialog__header {
+  display: flex;
+  min-height: 78px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--office-line);
+}
+
+.team-members-dialog__header h2 {
+  margin: 0;
+  color: var(--office-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.team-members-dialog__header p {
+  margin: 5px 0 0;
+  color: var(--office-muted);
+  font-size: 11px;
+}
+
+.team-members-dialog__close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #65736a;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.team-members-dialog__close:hover {
+  border-color: #e5eae4;
+  background: #f4f7f3;
+}
+
+.team-members-list {
+  max-height: min(470px, calc(80vh - 80px));
+  overflow-y: auto;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+}
+
+.team-member {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  gap: 11px;
+  padding: 7px 9px;
+  border-radius: 6px;
+}
+
+.team-member + .team-member {
+  margin-top: 2px;
+}
+
+.team-member__name {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  color: #304139;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-member__you {
+  flex: 0 0 auto;
+  color: #77847b;
+  font-size: 11px;
+}
+
+@keyframes team-members-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes team-members-rise-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .conversation-messages {
@@ -639,6 +788,17 @@
     display: none;
   }
 
+  .team-members-trigger {
+    width: 36px;
+    min-height: 36px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .team-members-trigger span {
+    display: none;
+  }
+
   .conversation-messages {
     padding: 18px 14px;
   }
@@ -646,6 +806,20 @@
   .conversation-composer {
     min-height: 68px;
     padding: 10px 14px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .team-members-backdrop {
+    align-items: flex-end;
+    padding: 12px;
+  }
+
+  .team-members-dialog {
+    width: 100%;
+    max-height: min(560px, 78vh);
+  }
+
+  .team-members-list {
+    max-height: calc(78vh - 80px);
   }
 }
 
@@ -655,5 +829,10 @@
   .office-chat *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .team-members-backdrop,
+  .team-members-dialog {
+    animation: none;
   }
 }
