@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { httpClient } from "../config/AxiosHelper";
 
 const SignupView = ({ onBack }) => {
   const [details, setDetails] = useState({
@@ -9,16 +10,17 @@ const SignupView = ({ onBack }) => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [notice, setNotice] = useState("");
+  const [status, setStatus] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setDetails((previous) => ({ ...previous, [name]: value }));
     setErrors((previous) => ({ ...previous, [name]: "" }));
-    setNotice("");
+    setStatus(null);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = {
       name: details.name.trim() ? "" : "Enter your name",
@@ -36,7 +38,36 @@ const SignupView = ({ onBack }) => {
     setErrors(nextErrors);
     if (Object.values(nextErrors).some(Boolean)) return;
 
-    setNotice("Account registration is not connected yet. Your details have not been saved.");
+    setIsSubmitting(true);
+    setStatus(null);
+
+    try {
+      const response = await httpClient.post("/register", {
+        name: details.name.trim(),
+        email: details.email.trim(),
+        username: details.username.trim(),
+        password: details.password,
+      });
+      const responseMessage = response.data?.message ?? response.data;
+
+      setStatus({
+        type: "success",
+        message: typeof responseMessage === "string" && responseMessage
+          ? responseMessage
+          : "Account created successfully. You can now join your team.",
+      });
+    } catch (error) {
+      const responseMessage = error.response?.data?.message ?? error.response?.data;
+
+      setStatus({
+        type: "error",
+        message: typeof responseMessage === "string" && responseMessage
+          ? responseMessage
+          : "Unable to create your account. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,10 +145,14 @@ const SignupView = ({ onBack }) => {
           {errors.password && <span id="signup-password-error" className="signup-error">{errors.password}</span>}
         </div>
 
-        {notice && <p className="signup-notice" role="status">{notice}</p>}
+        {status && (
+          <p className={`signup-notice signup-notice--${status.type}`} role={status.type === "error" ? "alert" : "status"}>
+            {status.message}
+          </p>
+        )}
 
-        <button className="signup-submit" type="submit">
-          Create account
+        <button className="signup-submit" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Creating account..." : "Create account"}
           <FiArrowRight aria-hidden="true" />
         </button>
       </form>

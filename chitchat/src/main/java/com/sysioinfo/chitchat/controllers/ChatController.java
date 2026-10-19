@@ -32,6 +32,10 @@ public class ChatController {
     }
 
 
+//    @MessageMapping — defines where incoming messages are routed.
+
+//    @SendTo — defines where the returned message is broadcast.
+
     //for sending and receiving messages
     @MessageMapping("/sendMessage/{groupId}")// /app/sendMessage/roomId
     @SendTo("/topic/group/{groupId}")//subscribe

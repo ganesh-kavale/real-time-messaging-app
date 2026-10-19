@@ -156,7 +156,7 @@
 	}
 }
 
-@media (max-width: 900px) {
+@media (max-width: 760px) {
 	.app-main {
 		grid-template-columns: minmax(0, 1fr);
 	}
@@ -496,6 +496,17 @@
 .signup-submit:focus-visible {
 	outline: 3px solid #85b99a;
 	outline-offset: 2px;
+}
+
+@media (min-width: 761px) and (max-height: 820px) {
+	.signup-card {
+		padding-top: 24px;
+		padding-bottom: 24px;
+	}
+
+	.signup-back {
+		margin-bottom: 20px;
+	}
 }
 
 @media (max-width: 900px) {

@@ -34,7 +34,7 @@ const JoinCreateChat = () => {
   const joinChat = async () => {
     if (!validateForm()) return;
     try {
-      const group = await joinChatApi(detail.groupId);
+      const group = await joinChatApi(detail);
       toast.success("Joined team successfully");
       setCurrentUser(detail.userName);
       setGroupId(group.groupId);
@@ -48,7 +48,7 @@ const JoinCreateChat = () => {
   const createGroup = async () => {
     if (!validateForm()) return;
     try {
-      const response = await createRoomApi(detail.groupId);
+      const response = await createRoomApi(detail);
       toast.success("Team created successfully");
       setCurrentUser(detail.userName);
       setGroupId(response.groupId);
