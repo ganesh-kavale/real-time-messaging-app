@@ -1,8 +1,9 @@
 package com.sysioinfo.chitchat.controllers;
 
 
-import com.sysioinfo.chitchat.entities.Message;
 import com.sysioinfo.chitchat.entities.Group;
+import com.sysioinfo.chitchat.entities.Message;
+import com.sysioinfo.chitchat.entities.TeamMember;
 import com.sysioinfo.chitchat.repositories.GroupRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/groups")
-@CrossOrigin("http://localhost:5174")
+@CrossOrigin("http://localhost:5174,\n" +
+        "http://localhost:8017")
 public class GroupsController {
 
     private GroupRepository groupRepository;
@@ -24,35 +26,40 @@ public class GroupsController {
 
     //create room
     @PostMapping
-    public ResponseEntity<?> createRoom(@RequestBody String groupId) {
+    public ResponseEntity<?> createRoom(@RequestBody TeamMember teamMember) {
 
-        if (groupRepository.findByGroupId(groupId) != null) {
+
+        System.out.println("teamMemberteamMember" + teamMember);
+        if (groupRepository.findByGroupId(teamMember.getGroupId()) != null) {
             //group is already there
             return ResponseEntity.badRequest().body("Group already exists!");
-
         }
-
 
         //create new group
         Group group = new Group();
-        group.setGroupId(groupId);
-        Group savedGroup = groupRepository.save(group);
-        return ResponseEntity.status(HttpStatus.CREATED).body(group);
-
-
+        group.setGroupId(teamMember.getGroupId());
+        group.getTeamMembers().add(newTeamMember(teamMember));
+        Group savedDetails = groupRepository.save(group);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDetails);
     }
 
-
-    //get room: join
-    @GetMapping("/{groupId}")
+    //get room: join // for checking groups availability
+    @PostMapping("/join-team")
     public ResponseEntity<?> joinRoom(
-            @PathVariable String groupId
+            @RequestBody TeamMember teamMember
     ) {
 
-        Group group = groupRepository.findByGroupId(groupId);
+        Group group = groupRepository.findByGroupId(teamMember.getGroupId());
         if (group == null) {
             return ResponseEntity.badRequest()
                     .body("Group not found!!");
+        }
+        System.out.println("teamMemberteamMember join" + group.getTeamMembers());
+
+        if (!group.getTeamMembers().contains(teamMember.getUserName())) {
+
+            group.getTeamMembers().add(newTeamMember(teamMember));
+            groupRepository.save(group);
         }
         return ResponseEntity.ok(group);
     }
@@ -67,8 +74,7 @@ public class GroupsController {
     ) {
         Group group = groupRepository.findByGroupId(groupId);
         if (group == null) {
-            return ResponseEntity.badRequest().build()
-                    ;
+            return ResponseEntity.badRequest().build();
         }
         //get messages :
         //pagination
@@ -80,5 +86,11 @@ public class GroupsController {
 
     }
 
+    public TeamMember newTeamMember(TeamMember team) {
+
+        TeamMember newTeamMember = new TeamMember();
+        newTeamMember.setUserName(team.getUserName());
+        return newTeamMember;
+    }
 
 }

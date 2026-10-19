@@ -17,15 +17,19 @@ import java.util.List;
 @AllArgsConstructor
 public class Group {
     @Id
-    private String id;//Mongo db : unique identifier
-    private String groupId;
+	private String userName;
+	private String groupId;
     private List<Message> messages = new ArrayList<>();
-	public String getId() {
-		return id;
+	private List<TeamMember> teamMembers = new ArrayList<>();
+
+	public String getUserName() {
+		return userName;
 	}
-	public void setId(String id) {
-		this.id = id;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
+
 	public String getGroupId() {
 		return groupId;
 	}
@@ -39,5 +43,11 @@ public class Group {
 		this.messages = messages;
 	}
 
+	public List<TeamMember> getTeamMembers(TeamMember teamMember) {
+		return teamMembers;
+	}
 
+	public void setTeamMembers(List<TeamMember> teamMembers) {
+		this.teamMembers = teamMembers;
+	}
 }

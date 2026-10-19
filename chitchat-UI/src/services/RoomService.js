@@ -3,15 +3,19 @@ import { httpClient } from "../config/AxiosHelper";
 export const createRoomApi = async (groupDetail) => {
   const respone = await httpClient.post(`/api/v1/groups`, groupDetail, {
     headers: {
-      "Content-Type": "text/plain",
+        "Content-Type": "application/json",
     },
   });
   return respone.data;
 };
 
-export const joinChatApi = async (groupId) => {
-  
-  const response = await httpClient.get(`/api/v1/groups/${groupId}`);
+export const joinChatApi = async (groupDetails) => {
+    const response = await httpClient.post(`/api/v1/groups/join-team`, groupDetails, {
+    headers: {
+        "Content-Type": "application/json",
+    },
+  });
+  // const response = await httpClient.post(`/api/v1/groups/${groupDetails}`);
   return response.data;
 };
 

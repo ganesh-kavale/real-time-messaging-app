@@ -15,7 +15,7 @@ const JoinCreateChatView = ({
         <p className="group-form-eyebrow">WELCOME TO MEETIN</p>
         <h2 className="group-form-title">Bring your team together.</h2>
         <p className="group-form-copy">
-          Join your team's room or create one for a new conversation.
+          Join your team's conversation or create a new team.
         </p>
 
         <div className="group-form-field">
@@ -33,12 +33,12 @@ const JoinCreateChatView = ({
         </div>
 
         <div className="group-form-field">
-          <label htmlFor="groupId" className="group-form-label">Team room ID</label>
+          <label htmlFor="groupId" className="group-form-label">Team ID</label>
           <input
             type="text"
             id="groupId"
             name="groupId"
-            placeholder="Enter your team room ID"
+            placeholder="Enter your team ID"
             value={detail.groupId}
             onChange={handleFormInputChange}
             className={`group-form-input ${errors.groupId ? "input-error" : ""}`}
@@ -48,12 +48,12 @@ const JoinCreateChatView = ({
 
         <div className="group-form-actions">
           <button type="button" className="group-form-btn group-form-btn--join" onClick={joinChat}>
-            Join room
+            Join team
             <FiArrowRight aria-hidden="true" />
           </button>
           <button type="button" className="group-form-btn group-form-btn--create" onClick={createGroup}>
             <FiPlus aria-hidden="true" />
-            Create room
+            Create team
           </button>
         </div>
       </div>

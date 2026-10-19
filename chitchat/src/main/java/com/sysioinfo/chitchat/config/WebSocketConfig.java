@@ -14,17 +14,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
 
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic"); // broker name that carries message
         // /topic/messages
 
-        config.setApplicationDestinationPrefixes("/app");
+        config.setApplicationDestinationPrefixes("/app"); // for message routing prefix. route to MesaageMapping
         // /app/chat
         // server-side: @MessagingMapping("/chat)
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat")//connection establishment
+        registry.addEndpoint("/chat")// websocket connection establishment
                 .setAllowedOrigins("http://localhost:5174")
                 .withSockJS();
     }

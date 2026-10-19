@@ -1,8 +1,12 @@
+import { useState } from "react";
 import "./App.css";
 import { FiArrowRight, FiMessageCircle } from "react-icons/fi";
 import JoinCreateChat from "./components/JoinCreateChat";
+import SignupView from "./components/SignupView";
 
 function App() {
+  const [showSignup, setShowSignup] = useState(false);
+
   return (
     <div className="app-shell" id="home">
       <header className="app-navbar">
@@ -14,10 +18,10 @@ function App() {
             <span className="app-brand__name">MEETIN</span>
           </a>
           <nav aria-label="Main navigation">
-            <a className="app-nav-link" href="#join">
+            <button className="app-nav-link" type="button" onClick={() => setShowSignup(true)}>
               Start a team chat
               <FiArrowRight aria-hidden="true" />
-            </a>
+            </button>
           </nav>
         </div>
       </header>
@@ -37,8 +41,12 @@ function App() {
             </p>
           </div>
         </section>
-        <section className="join-panel" id="join" aria-label="Join or create a team room">
-          <JoinCreateChat />
+        <section className="join-panel" id="join" aria-label="Join or create a team">
+          {showSignup ? (
+            <SignupView onBack={() => setShowSignup(false)} />
+          ) : (
+            <JoinCreateChat />
+          )}
         </section>
       </main>
     </div>

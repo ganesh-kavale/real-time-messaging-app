@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MdAttachFile, MdSend } from "react-icons/md";
+import { MdSend } from "react-icons/md";
+import {
+  FiBriefcase,
+  FiHash,
+  FiLogOut,
+  FiMessageSquare,
+  FiUsers,
+  FiX,
+} from "react-icons/fi";
 import useChatContext from "../context/ChatContext";
 import { useNavigate } from "react-router";
 import SockJS from "sockjs-client";
@@ -24,7 +32,8 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [typingUsers, setTypingUsers] = useState([]);
-  let [activeTypingUser, setActiveTypingUser] = useState("");
+  const [membersOpen, setMembersOpen] = useState(false);
+  const activeTypingUser = typingUsers[0] || "";
 
   const stompClientRef = useRef(null);
   const typingTimeouts = useRef({});
@@ -58,6 +67,17 @@ const ChatPage = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (!membersOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMembersOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [membersOpen]);
+
   // Initialize WebSocket and subscribe to group and typing topic
   useEffect(() => {
     const socket = new SockJS(`${baseURL}/chat`);
@@ -77,7 +97,6 @@ const ChatPage = () => {
         const data = JSON.parse(message.body);
         if (data.username !== currentUser) {
           setTypingUsers((prev) => {
-            setActiveTypingUser(prev);
             if (!prev.includes(data.username)) {
               return [...prev, data.username];
             }
@@ -122,72 +141,265 @@ const ChatPage = () => {
   };
 
   const handleLogout = () => {
-    stompClientRef.current.disconnect();
+    if (stompClientRef.current?.connected) {
+      stompClientRef.current.disconnect();
+    }
     setConnected(false);
     setGroupId("");
     setCurrentUser("");
     navigate("/");
   };
 
+  const userInitials = (currentUser || "U")
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+
+  const knownNames = [currentUser, ...typingUsers, ...messages.map((message) => message.sender)];
+  const membersByName = new Map();
+  knownNames.forEach((name) => {
+    const displayName = name?.trim();
+    const memberKey = displayName?.toLocaleLowerCase();
+    if (displayName && !membersByName.has(memberKey)) {
+      membersByName.set(memberKey, displayName);
+    }
+  });
+  const teamMembers = [...membersByName.values()];
+
   return (
-    <div className="chat-wrapper">
-      <div className="chat-card">
-        <div className="chat-header flex justify-between items-center w-full px-4 py-3 shadow bg-white dark:bg-gray-900">
-          {/* User Info */}
-          <div className="flex items-center gap-2">
-            <img
-              src="/default-avatar.png"
-              alt="Profile"
-              className="w-8 h-8 rounded-full border border-gray-300"
-            />
-            <h1 className="text-lg font-medium"> {currentUser}</h1>
+    <div className="office-chat">
+      <header className="office-topbar">
+        <a className="office-brand" href="/" aria-label="Meetin workspace home">
+          <span className="office-brand__icon" aria-hidden="true">
+            <FiMessageSquare />
+          </span>
+          <span>MEETIN</span>
+        </a>
+
+        <div className="office-topbar__room" aria-label="Current team">
+          <span className="office-topbar__workspace">
+            <FiBriefcase aria-hidden="true" /> Team workspace
+          </span>
+          <span className="office-topbar__separator" aria-hidden="true">/</span>
+          <span className="office-topbar__room-id">{groupId}</span>
+        </div>
+
+        <div className="office-topbar__actions">
+          <div className="office-user">
+            <span className="office-avatar" aria-hidden="true">{userInitials}</span>
+            <span className="office-user__name">{currentUser}</span>
+          </div>
+          <button
+            className="office-leave-button"
+            type="button"
+            onClick={handleLogout}
+            aria-label="Leave team"
+            title="Leave team"
+          >
+            <FiLogOut aria-hidden="true" />
+            <span>Leave</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="office-layout">
+        <aside className="office-sidebar" aria-label="Workspace navigation">
+          <div className="office-sidebar__section">
+            <p className="office-sidebar__label">WORKSPACE</p>
+            <div className="office-workspace-item">
+              <span className="office-workspace-item__icon" aria-hidden="true">
+                <FiBriefcase />
+              </span>
+              <span className="office-workspace-item__text">
+                <strong>Team workspace</strong>
+                <small>{groupId}</small>
+              </span>
+            </div>
           </div>
 
-          {/* Group Info */}
-          <h1 className="text-xl font-semibold"> {groupId}</h1>
-
-          {/* Leave Button */}
-          <button onClick={handleLogout} className="leave-btn">
-            Logout
-          </button>
-        </div>
-
-        <div className="chat-body" ref={chatBoxRef}>
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`message-row ${message.sender === currentUser ? "end" : "start"}`}
+          <nav className="office-sidebar__section" aria-label="Teams">
+            <p className="office-sidebar__label">TEAMS</p>
+            <button
+              className="office-room-link"
+              type="button"
+              aria-current="page"
+              aria-haspopup="dialog"
+              aria-expanded={membersOpen}
+              onClick={() => setMembersOpen(true)}
             >
-              <div className={`message-bubble ${message.sender === currentUser ? "user" : "other"}`}>
-                <div className="message-content">
-                  <span className="sender">{message.sender}</span>
-                  <span className="text">{message.content}</span>
-                  <span className="message-time">{timeAgo(message.timeStamp)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-          {activeTypingUser && (
-            <div className="typing-indicator">
-              {activeTypingUser} is typing...
-            </div>
-          )}
-        </div>
+              <FiHash aria-hidden="true" />
+              <span>{groupId || "Team"}</span>
+            </button>
+          </nav>
 
-        <div className="chat-footer">
-          <input
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            type="text"
-            className="chat-input"
-            placeholder={activeTypingUser ? `${activeTypingUser} is typing...` : "Type a message..."}
-          />
-          <button className="send-btn" onClick={sendMessage}>
-            <MdSend size={20} />
-          </button>
-        </div>
+          <div className="office-sidebar__profile">
+            <span className="office-avatar office-avatar--small" aria-hidden="true">
+              {userInitials}
+            </span>
+            <span className="office-sidebar__profile-copy">
+              <strong>{currentUser}</strong>
+              <small>Signed in</small>
+            </span>
+          </div>
+        </aside>
+
+        <section className="office-conversation" aria-label={`Messages in ${groupId}`}>
+          <header className="conversation-header">
+            <div className="conversation-heading">
+              <span className="conversation-heading__icon" aria-hidden="true">
+                <FiHash />
+              </span>
+              <span className="conversation-heading__text">
+                <h1>{groupId}</h1>
+                <span>Team</span>
+              </span>
+            </div>
+              {/* <span className="conversation-kind">TEAM CONVERSATION</span> */}
+
+            <button
+              className="team-members-trigger"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded={membersOpen}
+              aria-label={`View ${teamMembers.length} team members`}
+              onClick={() => setMembersOpen(true)}
+            >
+              <FiUsers aria-hidden="true" />
+              <span>{teamMembers.length} Team Members</span>
+            </button>
+          </header>
+
+          <div className="conversation-messages" ref={chatBoxRef}>
+            {messages.length === 0 ? (
+              <div className="conversation-empty">
+                <span className="conversation-empty__icon" aria-hidden="true">
+                  <FiMessageSquare />
+                </span>
+                <h2>Welcome to {groupId}</h2>
+                <p>Your team's conversation starts here.</p>
+              </div>
+            ) : (
+              messages.map((message, index) => {
+                const senderInitials = (message.sender || "U")
+                  .trim()
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map((part) => part[0]?.toUpperCase())
+                  .join("");
+
+                return (
+                  <article
+                    key={`${message.timeStamp || "message"}-${index}`}
+                    className={`message-row ${message.sender === currentUser ? "message-row--self" : ""}`}
+                  >
+                    <span className="office-avatar office-avatar--message" aria-hidden="true">
+                      {senderInitials}
+                    </span>
+                    <div className="message-main">
+                      <div className="message-meta">
+                        <strong>{message.sender}</strong>
+                        <time>{timeAgo(message.timeStamp)}</time>
+                      </div>
+                      <p className="message-text">{message.content}</p>
+                    </div>
+                  </article>
+                );
+              })
+            )}
+
+            {activeTypingUser && (
+              <div className="typing-indicator" aria-live="polite">
+                {activeTypingUser} is typing...
+              </div>
+            )}
+          </div>
+
+          <div className="conversation-composer">
+            <input
+              value={input}
+              onChange={handleInputChange}
+              onKeyDown={(event) => event.key === "Enter" && sendMessage()}
+              type="text"
+              className="chat-input"
+              aria-label="Write a message"
+              placeholder={activeTypingUser ? `${activeTypingUser} is typing...` : `Message ${groupId}`}
+            />
+            <button
+              className="send-btn"
+              type="button"
+              onClick={sendMessage}
+              aria-label="Send message"
+              title="Send message"
+            >
+              <MdSend aria-hidden="true" />
+            </button>
+          </div>
+        </section>
+
+        <aside className="room-details" aria-label="Team details">
+          <h2>Team details</h2>
+          <section className="room-details__section">
+            <p className="room-details__label">TEAM ID</p>
+            <p className="room-details__value"><FiHash aria-hidden="true" />{groupId}</p>
+          </section>
+          <section className="room-details__section">
+            <p className="room-details__label">SIGNED IN AS</p>
+            <div className="room-details__member">
+              <span className="office-avatar office-avatar--small" aria-hidden="true">
+                {userInitials}
+              </span>
+              <span>{currentUser}</span>
+            </div>
+          </section>
+        </aside>
       </div>
+
+      {membersOpen && (
+        <div className="team-members-backdrop" onClick={() => setMembersOpen(false)}>
+          <section
+            className="team-members-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="team-members-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <header className="team-members-dialog__header">
+              <div>
+                <h2 id="team-members-title">Team members</h2>
+                <p>{groupId} · {teamMembers.length} {teamMembers.length === 1 ? "person" : "people"}</p>
+              </div>
+              <button
+                className="team-members-dialog__close"
+                type="button"
+                aria-label="Close team members"
+                onClick={() => setMembersOpen(false)}
+              >
+                <FiX aria-hidden="true" />
+              </button>
+            </header>
+            <ul className="team-members-list">
+              {teamMembers.map((member) => {
+                const initials = member
+                  .split(/\s+/)
+                  .slice(0, 2)
+                  .map((part) => part[0]?.toUpperCase())
+                  .join("");
+                const isCurrentUser = member.toLocaleLowerCase() === currentUser.toLocaleLowerCase();
+
+                return (
+                  <li className="team-member" key={member}>
+                    <span className="office-avatar" aria-hidden="true">{initials}</span>
+                    <span className="team-member__name">{member}</span>
+                    {isCurrentUser && <span className="team-member__you">You</span>}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        </div>
+      )}
     </div>
   );
 };
