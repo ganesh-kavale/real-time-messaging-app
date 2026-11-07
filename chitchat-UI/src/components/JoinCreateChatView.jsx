@@ -13,13 +13,13 @@ const JoinCreateChatView = ({
     <div className="group-form-container">
       <div className="group-form-card">
         <p className="group-form-eyebrow">WELCOME TO MEETIN</p>
-        <h2 className="group-form-title">Bring your team together.</h2>
+        <h2 className="group-form-title">Let's get together.</h2>
         <p className="group-form-copy">
-          Join your team's conversation or create a new team.
+          Add your name and join your group, or create a new one.
         </p>
 
         <div className="group-form-field">
-          <label htmlFor="name" className="group-form-label">Display name</label>
+          <label htmlFor="name" className="group-form-label">Your name</label>
           <input
             type="text"
             id="name"
@@ -33,12 +33,12 @@ const JoinCreateChatView = ({
         </div>
 
         <div className="group-form-field">
-          <label htmlFor="groupId" className="group-form-label">Team ID</label>
+          <label htmlFor="groupId" className="group-form-label">Group ID</label>
           <input
             type="text"
             id="groupId"
             name="groupId"
-            placeholder="Enter your team ID"
+            placeholder="Enter the group ID"
             value={detail.groupId}
             onChange={handleFormInputChange}
             className={`group-form-input ${errors.groupId ? "input-error" : ""}`}
@@ -48,12 +48,12 @@ const JoinCreateChatView = ({
 
         <div className="group-form-actions">
           <button type="button" className="group-form-btn group-form-btn--join" onClick={joinChat}>
-            Join team
+            Join group
             <FiArrowRight aria-hidden="true" />
           </button>
           <button type="button" className="group-form-btn group-form-btn--create" onClick={createGroup}>
             <FiPlus aria-hidden="true" />
-            Create team
+            Create group
           </button>
         </div>
       </div>
