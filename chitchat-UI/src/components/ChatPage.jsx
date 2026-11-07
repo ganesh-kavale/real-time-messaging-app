@@ -15,6 +15,8 @@ import { Stomp } from "@stomp/stompjs";
 import toast from "react-hot-toast";
 import { baseURL } from "../config/AxiosHelper";
 import { getMessagess } from "../services/RoomService";
+
+import { getTeamMembers } from "../services/RoomService";
 import { timeAgo } from "../config/helper";
 import '../css/chat-area.css';
 
@@ -34,6 +36,9 @@ const ChatPage = () => {
   const [typingUsers, setTypingUsers] = useState([]);
   const [membersOpen, setMembersOpen] = useState(false);
   const activeTypingUser = typingUsers[0] || "";
+
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [totalMembers, setTotalMembers] = useState(0);
 
   const stompClientRef = useRef(null);
   const typingTimeouts = useRef({});
@@ -166,7 +171,26 @@ const ChatPage = () => {
       membersByName.set(memberKey, displayName);
     }
   });
-  const teamMembers = [...membersByName.values()];
+
+  // Load team members
+  useEffect(() => {
+    async function loadTeamMembers() {
+      try {
+        const response = await getTeamMembers(groupId);
+
+        setTeamMembers(response || []);
+        setTotalMembers(response ? response.length : 0);
+
+        console.log("totalMembers -->", response.length);
+      } catch (error) {
+        toast.error("Failed to load Team Members");
+      }
+    }
+
+    if (connected && groupId) {
+      loadTeamMembers();
+    }
+  }, [connected, groupId]);
 
   return (
     <div className="office-chat">
@@ -256,19 +280,20 @@ const ChatPage = () => {
                 <span>Team</span>
               </span>
             </div>
-              {/* <span className="conversation-kind">TEAM CONVERSATION</span> */}
+            {/* <span className="conversation-kind">TEAM CONVERSATION</span> */}
 
             <button
               className="team-members-trigger"
               type="button"
               aria-haspopup="dialog"
               aria-expanded={membersOpen}
-              aria-label={`View ${teamMembers.length} team members`}
+              aria-label={`View ${totalMembers} team members`}
               onClick={() => setMembersOpen(true)}
             >
               <FiUsers aria-hidden="true" />
-              <span>{teamMembers.length} Team Members</span>
+              <span>{totalMembers} Team Members</span>
             </button>
+
           </header>
 
           <div className="conversation-messages" ref={chatBoxRef}>
@@ -368,7 +393,7 @@ const ChatPage = () => {
             <header className="team-members-dialog__header">
               <div>
                 <h2 id="team-members-title">Team members</h2>
-                <p>{groupId} · {teamMembers.length} {teamMembers.length === 1 ? "person" : "people"}</p>
+                <p>{groupId} · {totalMembers} {totalMembers === 1 ? "person" : "people"}</p>
               </div>
               <button
                 className="team-members-dialog__close"
@@ -381,22 +406,35 @@ const ChatPage = () => {
             </header>
             <ul className="team-members-list">
               {teamMembers.map((member) => {
-                const initials = member
+                const memberName = typeof member === "string"
+                  ? member
+                  : member.userName;
+
+                const initials = memberName
                   .split(/\s+/)
                   .slice(0, 2)
                   .map((part) => part[0]?.toUpperCase())
                   .join("");
-                const isCurrentUser = member.toLocaleLowerCase() === currentUser.toLocaleLowerCase();
+
+                const isCurrentUser =
+                  memberName.toLowerCase() === currentUser.toLowerCase();
 
                 return (
-                  <li className="team-member" key={member}>
-                    <span className="office-avatar" aria-hidden="true">{initials}</span>
-                    <span className="team-member__name">{member}</span>
-                    {isCurrentUser && <span className="team-member__you">You</span>}
+                  <li className="team-member" key={memberName}>
+                    <span className="office-avatar" aria-hidden="true">
+                      {initials}
+                    </span>
+
+                    <span className="team-member__name">{memberName}</span>
+
+                    {isCurrentUser && (
+                      <span className="team-member__you">You</span>
+                    )}
                   </li>
                 );
               })}
             </ul>
+
           </section>
         </div>
       )}
