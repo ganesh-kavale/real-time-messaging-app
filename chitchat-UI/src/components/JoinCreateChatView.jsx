@@ -12,10 +12,10 @@ const JoinCreateChatView = ({
   return (
     <div className="group-form-container">
       <div className="group-form-card">
-        <p className="group-form-eyebrow">WELCOME TO MEET.IN</p>
-        <h2 className="group-form-title">Make the group chat happen.</h2>
+        <p className="group-form-eyebrow">WELCOME TO MEETIN</p>
+        <h2 className="group-form-title">Let's get together.</h2>
         <p className="group-form-copy">
-          Create a group or join with a code. Naming the chat is easy; picking a place to eat is on you.
+          Add your name and join your group, or create a new one.
         </p>
 
         <div className="group-form-field">
@@ -24,7 +24,7 @@ const JoinCreateChatView = ({
             type="text"
             id="name"
             name="userName"
-            placeholder="What should we call you?"
+            placeholder="Enter your name"
             value={detail.userName}
             onChange={handleFormInputChange}
             className={`group-form-input ${errors.userName ? "input-error" : ""}`}
@@ -33,12 +33,12 @@ const JoinCreateChatView = ({
         </div>
 
         <div className="group-form-field">
-          <label htmlFor="groupId" className="group-form-label">Group name or code</label>
+          <label htmlFor="groupId" className="group-form-label">Group ID</label>
           <input
             type="text"
             id="groupId"
             name="groupId"
-            placeholder="e.g. weekend-crew"
+            placeholder="Enter the group ID"
             value={detail.groupId}
             onChange={handleFormInputChange}
             className={`group-form-input ${errors.groupId ? "input-error" : ""}`}
@@ -48,12 +48,12 @@ const JoinCreateChatView = ({
 
         <div className="group-form-actions">
           <button type="button" className="group-form-btn group-form-btn--join" onClick={joinChat}>
-            Join a group
+            Join group
             <FiArrowRight aria-hidden="true" />
           </button>
           <button type="button" className="group-form-btn group-form-btn--create" onClick={createGroup}>
             <FiPlus aria-hidden="true" />
-            Create a group
+            Create group
           </button>
         </div>
       </div>
