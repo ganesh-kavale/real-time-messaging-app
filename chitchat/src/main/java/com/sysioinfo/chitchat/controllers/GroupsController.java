@@ -56,7 +56,9 @@ public class GroupsController {
         }
         System.out.println("teamMemberteamMember join" + group.getTeamMembers());
 
-        if (!group.getTeamMembers().contains(teamMember.getUserName())) {
+        if (group.getTeamMembers().stream()
+                .noneMatch(member -> member.getUserName()
+                        .equals(teamMember.getUserName()))) {
 
             group.getTeamMembers().add(newTeamMember(teamMember));
             groupRepository.save(group);
@@ -91,6 +93,16 @@ public class GroupsController {
         TeamMember newTeamMember = new TeamMember();
         newTeamMember.setUserName(team.getUserName());
         return newTeamMember;
+    }
+
+    @GetMapping("/{groupId}/team-members")
+    public ResponseEntity<List<TeamMember>> getTeamWiseMembers(
+            @PathVariable String groupId
+    ) {
+        Group group = groupRepository.findByGroupId(groupId);
+        List<TeamMember> teamMembers = group.getTeamMembers();
+
+        return ResponseEntity.ok(teamMembers);
     }
 
 }

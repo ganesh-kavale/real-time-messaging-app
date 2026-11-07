@@ -27,3 +27,13 @@ export const getMessagess = async (groupId, size = 50, page = 0) => {
   
   return response.data;
 };
+
+export const getTeamMembers = async (groupId) => {
+  const response = await httpClient.get(
+    `/api/v1/groups/${groupId}/team-members`
+  );
+  console.log(response.data);
+  
+  return response.data;
+};
+
