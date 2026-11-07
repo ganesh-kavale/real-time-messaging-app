@@ -74,11 +74,11 @@ const SignupView = ({ onBack }) => {
     <div className="signup-card">
       <button className="signup-back" type="button" onClick={onBack}>
         <FiArrowLeft aria-hidden="true" />
-        Back to team join
+        Back to the chat
       </button>
       <p className="signup-eyebrow">CREATE YOUR ACCOUNT</p>
-      <h2 className="signup-title">Make work more connected.</h2>
-      <p className="signup-copy">Set up your Meetin profile to get started with your team.</p>
+      <h2 className="signup-title">Make a little space for your people.</h2>
+      <p className="signup-copy">Create your meet.in profile and get your group together.</p>
 
       <form className="signup-form" onSubmit={handleSubmit} noValidate>
         <div className="signup-field">
@@ -98,13 +98,13 @@ const SignupView = ({ onBack }) => {
         </div>
 
         <div className="signup-field">
-          <label htmlFor="signup-email">Work email</label>
+          <label htmlFor="signup-email">Email</label>
           <input
             id="signup-email"
             name="email"
             type="email"
             autoComplete="email"
-            placeholder="you@company.com"
+            placeholder="you@example.com"
             value={details.email}
             onChange={handleChange}
             aria-invalid={Boolean(errors.email)}
