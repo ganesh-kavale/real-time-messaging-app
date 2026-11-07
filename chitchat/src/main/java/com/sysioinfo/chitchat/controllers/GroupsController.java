@@ -100,7 +100,7 @@ public class GroupsController {
             @PathVariable String groupId
     ) {
         Group group = groupRepository.findByGroupId(groupId);
-        List<TeamMember> teamMembers = group.getTeamMembers().stream().map(e->e.getUserName());
+        List<TeamMember> teamMembers = group.getTeamMembers();
 
         return ResponseEntity.ok(teamMembers);
     }
