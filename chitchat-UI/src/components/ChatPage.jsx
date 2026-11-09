@@ -19,6 +19,17 @@ import { getMessagess } from "../services/RoomService";
 import { getTeamMembers } from "../services/RoomService";
 import { timeAgo } from "../config/helper";
 import '../css/chat-area.css';
+import { GiBinoculars } from "react-icons/gi";
+
+import {
+  // FiBriefcase,
+  FiChevronDown,
+  // FiHash,
+  // FiLogOut,
+  // FiMessageSquare,
+  // FiUsers,
+  // FiX,
+} from "react-icons/fi";
 
 const ChatPage = () => {
   const {
@@ -36,6 +47,7 @@ const ChatPage = () => {
   const [typingUsers, setTypingUsers] = useState([]);
   const [membersOpen, setMembersOpen] = useState(false);
   const activeTypingUser = typingUsers[0] || "";
+const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [teamMembers, setTeamMembers] = useState([]);
   const [totalMembers, setTotalMembers] = useState(0);
@@ -192,9 +204,22 @@ const ChatPage = () => {
     }
   }, [connected, groupId]);
 
+  useEffect(() => {
+  const handleEscape = (event) => {
+    if (event.key === "Escape") {
+      setIsMenuOpen(false);
+    }
+  };
+
+  window.addEventListener("keydown", handleEscape);
+
+  return () => {
+    window.removeEventListener("keydown", handleEscape);
+  };
+}, []);
   return (
     <div className="office-chat">
-      <header className="office-topbar">
+      <header className="office-topbar" >
         <a className="office-brand" href="/" aria-label="Meetin workspace home">
           <span className="office-brand__icon" aria-hidden="true">
             <FiMessageSquare />
@@ -202,13 +227,80 @@ const ChatPage = () => {
           <span>MEETIN</span>
         </a>
 
-        <div className="office-topbar__room" aria-label="Current team">
-          <span className="office-topbar__workspace">
-            <FiBriefcase aria-hidden="true" /> Team workspace
-          </span>
-          <span className="office-topbar__separator" aria-hidden="true">/</span>
-          <span className="office-topbar__room-id">{groupId}</span>
+<div className="office-topbar__room" aria-label="Current team">
+
+  {/* Desktop View */}
+  <div className="office-topbar__room-desktop">
+
+    <span className="office-topbar__workspace">
+      <FiBriefcase aria-hidden="true" />
+      Team workspace
+
+      <span className="office-topbar__separator">/</span>
+
+      <span className="office-topbar__room-id">
+        {groupId}
+      </span>
+    </span>
+
+    <span className="office-topbar__separator">|</span>
+
+    <span className="office-topbar__room-id">
+      Reel N ROLL
+    </span>
+
+    <span className="office-topbar__separator">|</span>
+
+    <span className="office-topbar__room-id office-topbar__post-views">
+      SCROLLS
+      <GiBinoculars />
+    </span>
+
+  </div>
+
+  {/* Mobile and Tablet Dropdown */}
+  <div className="office-topbar__room-mobile">
+
+    <button
+      type="button"
+      className="office-topbar__dropdown-btn"
+      onClick={() => setIsMenuOpen(prev => !prev)}
+      aria-expanded={isMenuOpen}
+      aria-haspopup="true"
+    >
+      <FiBriefcase />
+      <span>Team workspace</span>
+
+      <FiChevronDown
+        className={isMenuOpen ? "is-open" : ""}
+      />
+    </button>
+
+    {isMenuOpen && (
+      <div className="office-topbar__dropdown-menu">
+
+        <div className="office-topbar__dropdown-item">
+          <FiBriefcase />
+          <span>{groupId}</span>
         </div>
+
+        <div className="office-topbar__dropdown-item">
+          <span>Reel N ROLL</span>
+        </div>
+
+        <div className="office-topbar__dropdown-item">
+          <GiBinoculars />
+          <span>SCROLLS</span>
+        </div>
+
+      </div>
+    )}
+
+  </div>
+
+</div>
+
+
 
         <div className="office-topbar__actions">
           <div className="office-user">

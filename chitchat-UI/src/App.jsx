@@ -5,6 +5,7 @@ import JoinCreateChat from "./components/JoinCreateChat";
 function App() {
   return (
     <div className="app-shell" id="home">
+ 
       <header className="app-navbar">
         <div className="app-navbar__inner">
           <a className="app-brand" href="#home" aria-label="Meetin home">
@@ -21,6 +22,7 @@ function App() {
           </nav>
         </div>
       </header>
+   
       <main className="app-main">
         <section className="welcome-panel" aria-labelledby="welcome-title">
           <img

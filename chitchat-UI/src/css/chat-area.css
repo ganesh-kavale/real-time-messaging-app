@@ -55,15 +55,33 @@
   color: var(--office-green);
   font-size: 18px;
 }
+/* =========================================
+   TOPBAR ROOM - COMMON STYLES
+========================================= */
 
 .office-topbar__room {
   display: flex;
   min-width: 0;
   flex: 1;
   align-items: center;
-  gap: 12px;
+  gap: 30px;
   color: var(--office-muted);
   font-size: 13px;
+}
+
+/* =========================================
+   DESKTOP VIEW
+========================================= */
+
+.office-topbar__room-desktop {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 30px;
+}
+
+.office-topbar__room-mobile {
+  display: none;
 }
 
 .office-topbar__workspace {
@@ -89,6 +107,21 @@
   white-space: nowrap;
 }
 
+.office-topbar__post-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.office-topbar__post-views svg {
+  color: var(--office-green);
+  font-size: 16px;
+}
+
+/* =========================================
+   TOPBAR ACTIONS
+========================================= */
+
 .office-topbar__actions {
   display: flex;
   flex: 0 0 auto;
@@ -96,6 +129,141 @@
   gap: 20px;
 }
 
+/* =========================================
+   MOBILE & TABLET DROPDOWN
+========================================= */
+
+@media screen and (max-width: 1024px) {
+
+  .office-topbar__room {
+    flex: 1;
+    min-width: 0;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .office-topbar__room-desktop {
+    display: none;
+  }
+
+  .office-topbar__room-mobile {
+    display: block;
+    position: relative;
+  }
+
+  .office-topbar__dropdown-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    padding: 9px 12px;
+
+    border: 1px solid var(--office-border, #ddd);
+    border-radius: 8px;
+
+    background: transparent;
+    color: var(--office-ink);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .office-topbar__dropdown-btn > svg:first-child {
+    color: var(--office-green);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .office-topbar__dropdown-btn > svg:last-child {
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  .office-topbar__dropdown-btn > svg:last-child.is-open {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown menu */
+
+  .office-topbar__dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+
+    min-width: 200px;
+    width: max-content;
+    max-width: min(280px, calc(100vw - 24px));
+
+    padding: 6px;
+
+    background: var(--office-surface, #fff);
+    color: var(--office-ink);
+
+    border: 1px solid var(--office-border, #e5e5e5);
+    border-radius: 10px;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    z-index: 1000;
+  }
+
+  .office-topbar__dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    min-width: 0;
+    padding: 11px 10px;
+
+    color: var(--office-ink);
+    font-size: 13px;
+    font-weight: 550;
+
+    border-radius: 6px;
+  }
+
+  .office-topbar__dropdown-item svg {
+    flex-shrink: 0;
+    color: var(--office-green);
+    font-size: 16px;
+  }
+
+  .office-topbar__dropdown-item span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .office-topbar__dropdown-item:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media screen and (max-width: 480px) {
+
+  .office-topbar__dropdown-btn {
+    padding: 8px 10px;
+    gap: 7px;
+    font-size: 12px;
+  }
+
+  .office-topbar__dropdown-menu {
+    min-width: 180px;
+  }
+
+  .office-topbar__actions {
+    gap: 10px;
+  }
+}
 .office-user {
   display: flex;
   align-items: center;
